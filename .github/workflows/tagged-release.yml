@@ -108,7 +108,7 @@ jobs:
 
       - name: Build sosreport RPM
         run: |
-          mock -r rocky+epel-9-x86_64 --rebuild --spec=warewulf-sosplugin.spec --sources=include/sos/
+          mock -r rocky+epel-9-x86_64 --rebuild --spec=warewulf-sosplugin.spec --sources=.
 
       - name: Attach RPM and SRPM to release
         uses: xresloader/upload-to-github-release@v1
