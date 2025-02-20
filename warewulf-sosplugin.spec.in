@@ -18,7 +18,7 @@ It collects Warewulf system data by copying configuration directories
 and executing wwctl commands while excluding the /var/lib/warewulf/chroots directory.
 
 %prep
-%setup -q -n %{name}-%{version} -b0 %if %{?with_offline:-a2}
+%setup -q -n warewulf-%{version} -b0 %if %{?with_offline:-a2}
 
 %build
 
