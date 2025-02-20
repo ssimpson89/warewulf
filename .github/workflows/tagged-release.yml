@@ -88,6 +88,7 @@ jobs:
 
   sos-rpm:
     name: Build sosreport RPM
+    needs: dist
     runs-on: ubuntu-latest
     container:
       image: rockylinux/rockylinux:9
