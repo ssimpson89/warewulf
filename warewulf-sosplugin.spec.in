@@ -38,12 +38,14 @@ fi
 rm -f %{buildroot}/tmp/warewulf.py
 
 %postun
-# On removal, if the sos plugins directory exists and the file is present, remove it
-sos_dir=$(python3 -c "import sos; print(sos.__path__[0])" 2>/dev/null)
-plugin_dir="${sos_dir}/report/plugins"
+if [ "$1" -eq 0 ]; then
+    # On removal, if the sos plugins directory exists and the file is present, remove it
+    sos_dir=$(python3 -c "import sos; print(sos.__path__[0])" 2>/dev/null)
+    plugin_dir="${sos_dir}/report/plugins"
 
-if [ -f "$plugin_dir/warewulf.py" ]; then
-    rm -f "$plugin_dir/warewulf.py"
+    if [ -f "$plugin_dir/warewulf.py" ]; then
+        rm -f "$plugin_dir/warewulf.py"
+    fi
 fi
 
 %files
