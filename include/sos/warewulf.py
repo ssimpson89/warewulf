@@ -14,7 +14,11 @@ class Warewulf(Plugin, IndependentPlugin):
           "/var/lib/warewulf/overlays/",
           "/usr/share/warewulf/overlays/",
           "/var/log/warewulfd.log",
-          "/etc/warewulf/"
+          "/etc/warewulf/",
+          "/var/lib/dhcpd/",
+          "/etc/dhcp/",
+          "/etc/dnsmasq.d",
+          "/var/lib/dnsmasq/dnsmasq.leases"
         ])
         
         self.add_forbidden_path([
