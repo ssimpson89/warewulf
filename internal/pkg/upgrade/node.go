@@ -67,52 +67,6 @@ func (legacy *NodesYaml) Upgrade(addDefaults bool, replaceOverlays bool, warewul
 			wwlog.Warn("node %s does not include the default profile: verify default settings manually", name)
 		}
 	}
-	if addDefaults {
-		if _, ok := upgraded.NodeProfiles["default"]; !ok {
-			upgraded.NodeProfiles["default"] = new(node.Profile)
-			upgraded.NodeProfiles["default"].Kernel = new(node.KernelConf)
-		}
-		defaultProfile := upgraded.NodeProfiles["default"]
-		if len(defaultProfile.SystemOverlay) == 0 {
-			defaultProfile.SystemOverlay = append(
-				defaultProfile.SystemOverlay, wwinitSplitOverlays...)
-		}
-		if len(defaultProfile.RuntimeOverlay) == 0 {
-			defaultProfile.RuntimeOverlay = append(
-				defaultProfile.RuntimeOverlay, genericSplitOverlays...)
-		}
-		if len(defaultProfile.Kernel.Args) < 1 {
-			defaultProfile.Kernel.Args = []string{"quiet", "crashkernel=no", "vga=791", "net.naming-scheme=v238"}
-		}
-		if defaultProfile.Init == "" {
-			defaultProfile.Init = "/sbin/init"
-		}
-		if defaultProfile.Root == "" {
-			defaultProfile.Root = "initramfs"
-		}
-		if defaultProfile.Ipxe == "" {
-			defaultProfile.Ipxe = "default"
-		}
-		if _, ok := defaultProfile.Resources["fstab"]; !ok {
-			if defaultProfile.Resources == nil {
-				defaultProfile.Resources = make(map[string]node.Resource)
-			}
-			defaultProfile.Resources["fstab"] = []map[string]string{
-				{
-					"spec":    "warewulf:/home",
-					"file":    "/home",
-					"vfstype": "nfs",
-					"mntops":  "defaults,nofail",
-				},
-				{
-					"spec":    "warewulf:/opt",
-					"file":    "/opt",
-					"vfstype": "nfs",
-					"mntops":  "defaults,noauto,nofail,ro",
-				},
-			}
-		}
-	}
 	if warewulfconf != nil && warewulfconf.NFS != nil {
 		var fstab []map[string]string
 		for _, export := range warewulfconf.NFS.Exports {
@@ -151,6 +105,52 @@ func (legacy *NodesYaml) Upgrade(addDefaults bool, replaceOverlays bool, warewul
 				}
 			} else {
 				upgraded.NodeProfiles["default"].Resources["fstab"] = fstab
+			}
+		}
+	}
+	if addDefaults {
+		if _, ok := upgraded.NodeProfiles["default"]; !ok {
+			upgraded.NodeProfiles["default"] = new(node.Profile)
+			upgraded.NodeProfiles["default"].Kernel = new(node.KernelConf)
+		}
+		defaultProfile := upgraded.NodeProfiles["default"]
+		if len(defaultProfile.SystemOverlay) == 0 {
+			defaultProfile.SystemOverlay = append(
+				defaultProfile.SystemOverlay, wwinitSplitOverlays...)
+		}
+		if len(defaultProfile.RuntimeOverlay) == 0 {
+			defaultProfile.RuntimeOverlay = append(
+				defaultProfile.RuntimeOverlay, genericSplitOverlays...)
+		}
+		if len(defaultProfile.Kernel.Args) < 1 {
+			defaultProfile.Kernel.Args = []string{"quiet", "crashkernel=no"}
+		}
+		if defaultProfile.Init == "" {
+			defaultProfile.Init = "/sbin/init"
+		}
+		if defaultProfile.Root == "" {
+			defaultProfile.Root = "initramfs"
+		}
+		if defaultProfile.Ipxe == "" {
+			defaultProfile.Ipxe = "default"
+		}
+		if _, ok := defaultProfile.Resources["fstab"]; !ok {
+			if defaultProfile.Resources == nil {
+				defaultProfile.Resources = make(map[string]node.Resource)
+			}
+			defaultProfile.Resources["fstab"] = []map[string]string{
+				{
+					"spec":    "warewulf:/home",
+					"file":    "/home",
+					"vfstype": "nfs",
+					"mntops":  "defaults,nofail",
+				},
+				{
+					"spec":    "warewulf:/opt",
+					"file":    "/opt",
+					"vfstype": "nfs",
+					"mntops":  "defaults,noauto,nofail,ro",
+				},
 			}
 		}
 	}

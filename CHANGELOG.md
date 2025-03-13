@@ -4,7 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## v4.6.0, unreleased
+## v4.6.1, unreleased
+
+### Changed
+
+- Update GitHub actions to build aarch64 artifacts.
+
+## v4.6.0, 2025-03-02
+
+### Added
+
+- Support Ubuntu-style dracut initrd images.
+
+### Fixed
+
+- Fix nightly builds.
+- Better handling for missing NetDev.Device. #1777
+- Remove dracut NetworkManager connections between boot phases. #1780
+
+### Changed
+
+- Match default kernel arguments from `wwctl upgrade nodes` with the distributed `nodes.conf`.
+- Use `wwctl overlay <import|build> --workers=0` to indicate `runtime.NumCPU()`. #1782
+
+### Dependencies
+
+- Bump github.com/grpc-ecosystem/grpc-gateway/v2 from 2.23.0 to 2.26.1 #1724
+- Bump google.golang.org/protobuf from 1.35.1 to 1.36.5 #1712
+- Bump github.com/containers/storage from 1.55.2 to 1.57.1 #1676
+- Bump google.golang.org/grpc from 1.67.1 to 1.70.0 #1650
+- Bump golang.org/x/crypto from 0.28.0 to 0.31.0 #1772
+- Bump golang.org/x/net from 0.30.0 to 0.33.0 #1774
+- Bump github.com/go-jose/go-jose/v4 from 4.0.2 to 4.0.5 #1773
+- Bump github.com/golang/glog from 1.2.3 to 1.2.4 #1771
+
+## v4.6.0rc3, 2025-02-23
 
 ### Added
 
@@ -38,6 +72,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added logging to wwinit scripts. #1156
 - Renamed /warewulf/wwinit to /warewulf/prescripts. #1156
 - Display auto-detected kernel version during iPXE and GRUB. #1742
+- Reduced default verbosity of `wwctl overlay build`.
+- Reorganized and updated userdocs. #1116, #1324
 
 ### Fixed
 
@@ -49,6 +85,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Don't add "default" profile to new nodes if it does not exist. #1721
 - Make DHCP range optional.
 - Don't use DHCP for interfaces attached to a bond. #1743
+- Wait until ignition has completed before trying to mount.
+- Fix timeout problem for wwclient. #1741
+- Fixed default "true" state of NetDev.OnBoot. #1754
+- Port NFS mounts during `wwctl upgrade nodes` before applying defaults. #1758
 
 ### Removed
 
@@ -131,8 +171,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add `wwctl clean` to remove OCI cache and overlays from deleted nodes
 - Add `wwctl container import --platform`. #1381
 - Read environment variables from `/etc/default/warewulfd` #725
-- Add support for VLANs to NetworkManager, wicked, ifcfg, debian.network_interfaces overlays. #1257
-- Add support for static routes to NetworkManager, wicked, ifcfg, debian.network_interfaces overlays. #1257
+- Add support for VLANs to NetworkManager, wicked, ifcfg, debian.interfaces overlays. #1257
+- Add support for static routes to NetworkManager, wicked, ifcfg, debian.interfaces overlays. #1257
 - Add `wwctl upgrade <config|nodes>`. #230, #517
 - Better handling of InfiniBand udev net naming. #1227
 - use templating mechanism for power commands. #1004
@@ -177,7 +217,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove NodeInfo (in-memory-only) data structure, consolidating onto NodeConf. #916
 - Replace `defaults.conf` with settings on the default profile. #917
 - Switched from yaml.v2 to yaml.v3 #1462
-- Make OCIBlobCache a seperate path and point it to `/var/cache` #1459
+- Make OCIBlobCache a separate path and point it to `/var/cache` #1459
 - Updated various shell scripts for POSIX compatibility. #1464
 - Update `wwctl server` to always run in the foreground #508
 - Update `wwctl server` to log to stdout rather than a file #503
@@ -226,11 +266,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Update links on contributing page to point to warewulf repo.
-- Prevent Networkmanager from trying to optain IP address via DHCP
+- Prevent NetworkManager from trying to obtain IP address via DHCP
   on unused/unmanaged network interfaces.
 - Systems with no SMBIOS (Raspberry Pi) will create a UUID from
   `/sys/firmware/devicetree/base/serial-number`
-- Replace slice in templates with sprig substr. #1093
+- Replace slice in templates with sprig substr. #1139
 - Fix an invalid format issue for the GitHub nightly build action. #1258
 - Return non-zero exit code on overlay build failure #1393
 - Return non-zero exit code on container copy failure #1377
