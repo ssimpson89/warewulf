@@ -13,6 +13,9 @@ master={{ $netdev.Tags.master }}
 slave-type=bond
 {{- end }}
 autoconnect={{ $netdev.OnBoot.BoolDefaultTrue }}
+{{- if $netdev.Tags.zone }}
+zone={{ $netdev.Tags.zone }}
+{{- end }}
 
 {{- if eq (lower $netdev.Type) "bond" }}
 [bond]
@@ -45,6 +48,9 @@ method=disabled
 
 [ipv6]
 method=disabled
+{{- else if eq $netdev.Tags.method "auto" }}  
+[ipv4]  
+method=auto
 {{- else }}
 [ipv4]
 method=manual
@@ -60,6 +66,9 @@ gateway={{ $netdev.Gateway }}
 {{- $dns = print $dns $tv ";" }}
 {{- else if eq (substr 0 5 $tk) "route" }}
 {{$tk}}={{$tv}}
+{{- end }}
+{{- if eq (substr 0 5 $tk) "dhcp-" }}  
+{{$tk}}={{$tv}}  
 {{- end }}
 {{- end }}
 {{- if $dns }}
