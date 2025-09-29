@@ -45,6 +45,12 @@ method=disabled
 
 [ipv6]
 method=disabled
+<<<<<<< Updated upstream
+=======
+{{- else if eq $netdev.Tags.method "auto" }}
+[ipv4]
+method=auto
+>>>>>>> Stashed changes
 {{- else }}
 [ipv4]
 method=manual
@@ -60,6 +66,13 @@ gateway={{ $netdev.Gateway }}
 {{- $dns = print $dns $tv ";" }}
 {{- else if eq (substr 0 5 $tk) "route" }}
 {{$tk}}={{$tv}}
+<<<<<<< Updated upstream
+=======
+{{- else if eq (upper $tk) "DHCP-HOSTNAME" }}
+dhcp-hostname={{$tv}}
+{{- else if eq (upper $tk) "DHCP-CLIENT-ID" }}
+dhcp-client-id={{$tv}}
+>>>>>>> Stashed changes
 {{- end }}
 {{- end }}
 {{- if $dns }}
@@ -70,11 +83,19 @@ dns-search={{ join ";" (without (regexSplit "[ ;]+" $netdev.Tags.DNSSEARCH -1) "
 {{- end }}
 
 [ipv6]
+{{- if eq $netdev.Tags.method "auto" }}
+method=auto
+{{- else }}
 addr-gen-mode=stable-privacy
 method=ignore
 never-default=true
+{{- end }}
 {{- if $netdev.Ipaddr6 }}
 ipaddr="{{ $netdev.Ipaddr6 }}"
+{{- end }}
+{{- range $tk, $tv := $netdev.Tags }}
+{{- if eq (upper $tk) "DHCP-HOSTNAME" }}
+dhcp-hostname={{$tv}}
 {{- end }}
 {{- end }}
 
