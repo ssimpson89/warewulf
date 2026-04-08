@@ -84,7 +84,7 @@ if [ -f /tmp/wwinit/warewulf/mounts ]; then
         mkdir -p "${NEWROOT}${_mnt}"
         mount -t "${_fmt}" "${_dev}" "${NEWROOT}${_mnt}" \
             || warn "warewulf: failed to mount ${_dev} at ${NEWROOT}${_mnt} (ignored)"
-    done < /tmp/wwinit/warewulf/mounts
+    done < <(sort -k3 /tmp/wwinit/warewulf/mounts)
 fi
 
 for stage in "image" "system"; do

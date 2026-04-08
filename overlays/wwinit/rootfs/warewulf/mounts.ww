@@ -1,8 +1,5 @@
-{{- $hasMounts := false }}
 {{- range $fsdevice, $fs := .FileSystems }}
 {{- if and $fs.Path (ne $fs.Path "/") (ne $fs.Format "swap") }}
-{{- $hasMounts = true }}
 {{ $fsdevice }} {{ $fs.Format }} {{ $fs.Path }}
 {{- end }}
 {{- end }}
-{{- if not $hasMounts }}{{ abort }}{{- end }}
