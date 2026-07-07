@@ -1,10 +1,13 @@
 package nodestatus
 
 import (
+	"cmp"
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -51,9 +54,9 @@ func CobraRunE(cmd *cobra.Command, args []string) (err error) {
 
 	controller := warewulfconf.Get()
 
-	if controller.Ipaddr == "" {
+	host := cmp.Or(controller.Ipaddr, controller.Ipaddr6)
+	if host == "" {
 		return fmt.Errorf("warewulf Server IP Address is not properly configured")
-
 	}
 
 	for {
@@ -62,7 +65,7 @@ func CobraRunE(cmd *cobra.Command, args []string) (err error) {
 		var count int
 		rightnow := time.Now().Unix()
 
-		statusURL := fmt.Sprintf("http://%s:%d/status", controller.Ipaddr, controller.Warewulf.Port)
+		statusURL := fmt.Sprintf("http://%s/status", net.JoinHostPort(host, strconv.Itoa(controller.Warewulf.Port)))
 		wwlog.Verbose("Connecting to: %s", statusURL)
 
 		resp, err := http.Get(statusURL)

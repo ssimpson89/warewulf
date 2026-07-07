@@ -20,6 +20,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- `wwctl node status` no longer fails with "warewulf Server IP Address is not
+  properly configured" when `warewulf.conf` defines only an IPv6 address
+  (`ipaddr6`): the command now falls back to `ipaddr6` and formats the status
+  URL with correct IPv6 bracket notation.
 - Prevent cpio hardlink corruption caused by 64-bit inode numbers truncating to
   colliding 32-bit values when building node images and overlays: pass
   `--renumber-inodes` to cpio when the installed version supports it (GNU cpio
